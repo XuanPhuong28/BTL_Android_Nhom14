@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quản lý khách sạn</string>
+
+    <!-- Bộ lọc -->
+    <string name="filter_status">Tình trạng</string>
+    <string name="filter_type">Loại phòng</string>
+    <string name="apply_filter">Áp dụng</string>
+
+    <!-- Trạng thái phòng -->
+    <string name="status_all">Tất cả</string>
+    <string name="status_trong">Trống</string>
+    <string name="status_dadat">Đã đặt</string>
+
+    <!-- Loại phòng -->
+    <string name="type_all">Tất cả</string>
+    <string name="type_thuong">Phòng thường</string>
+    <string name="type_vip">Phòng VIP</string>
+    <string name="type_luxury">Phòng Luxury</string>
+
+    <!-- Chi tiết phòng -->
+    <string name="room_number">Phòng</string>
+    <string name="room_type">Loại:</string>
+    <string name="room_price">Giá:</string>
+    <string name="room_status">Tình trạng:</string>
+    <string name="room_description">Mô tả:</string>
+
+    <!-- Khác -->
+    <string name="no_data">Không có dữ liệu phù hợp</string>
+</resources>

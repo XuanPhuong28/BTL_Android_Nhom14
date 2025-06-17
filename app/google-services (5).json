@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "819736900155",
+    "project_id": "btlon-941fd",
+    "storage_bucket": "btlon-941fd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819736900155:android:d5298e0d4c0d72b6c7e21e",
+        "android_client_info": {
+          "package_name": "vn.tlu.edu.phungxuanpphuong.btl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqoR8bo5F3gfAKQ4UsW8mB20qQiPKgSL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
