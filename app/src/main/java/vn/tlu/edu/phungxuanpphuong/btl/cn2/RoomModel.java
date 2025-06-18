@@ -1,6 +1,8 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
-public class RoomModel {
+import java.io.Serializable;
+
+public class RoomModel implements Serializable {
     private String roomId;
     private String roomNumber;
     private String type;

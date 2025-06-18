@@ -1,7 +1,12 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +21,10 @@ public class RoomListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RoomBookingAdapter adapter;
     private List<RoomModel> roomList;
+    private Spinner spinnerType, spinnerStatus;
+    private Button btnApply;
+
+    private List<RoomModel> originalRoomList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,30 +36,77 @@ public class RoomListActivity extends AppCompatActivity {
 
         roomList = new ArrayList<>();
         adapter = new RoomBookingAdapter(roomList, this, room -> {
-            // handle click
+
+            Intent intent = new Intent(RoomListActivity.this, RoomDetailActivity.class);
+            intent.putExtra("room", room); // room là đối tượng RoomModel
+            startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
 
+        spinnerType = findViewById(R.id.spinnerType);
+        spinnerStatus = findViewById(R.id.spinnerStatus);
+        btnApply = findViewById(R.id.btnApply);
+
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.room_types,
+                android.R.layout.simple_spinner_item
+        );
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerType.setAdapter(typeAdapter);
+
+        ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.room_statuses,
+                android.R.layout.simple_spinner_item
+        );
+        statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerStatus.setAdapter(statusAdapter);
+
+        btnApply.setOnClickListener(v -> applyFilter());
+
+        fetchRoomsFromFirebase();
+    }
+    private void fetchRoomsFromFirebase() {
         DatabaseReference ref = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference("rooms");
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                roomList.clear();
+                originalRoomList.clear();
                 for (DataSnapshot roomSnap : snapshot.getChildren()) {
                     RoomModel room = roomSnap.getValue(RoomModel.class);
                     if (room != null) {
-                        roomList.add(room);
+                        originalRoomList.add(room);
                     }
                 }
-                adapter.notifyDataSetChanged();
+                applyFilter();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("RoomListActivity", "Database error: " + error.getMessage());
+                Log.e("RoomListActivity", "Firebase error: " + error.getMessage());
             }
         });
     }
+
+    private void applyFilter() {
+        String selectedType = spinnerType.getSelectedItem().toString();
+        String selectedStatus = spinnerStatus.getSelectedItem().toString();
+
+        List<RoomModel> filtered = new ArrayList<>();
+        for (RoomModel room : originalRoomList) {
+            boolean matchType = selectedType.equals("Tất cả") || room.getType().equals(selectedType);
+            boolean matchStatus = selectedStatus.equals("Tất cả") || room.getStatus().equals(selectedStatus);
+            if (matchType && matchStatus) {
+                filtered.add(room);
+            }
+        }
+
+        roomList.clear();
+        roomList.addAll(filtered);
+        adapter.notifyDataSetChanged();
+    }
 }
+

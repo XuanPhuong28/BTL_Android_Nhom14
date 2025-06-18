@@ -69,4 +69,10 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
             imgRoom = itemView.findViewById(R.id.imgRoom);
         }
     }
+
+    public void updateRoomList(List<RoomModel> newList) {
+        roomList = newList;
+        notifyDataSetChanged();
+    }
+
 }

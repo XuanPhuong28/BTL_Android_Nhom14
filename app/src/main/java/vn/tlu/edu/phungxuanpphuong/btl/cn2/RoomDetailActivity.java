@@ -3,6 +3,7 @@ package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,15 +28,19 @@ public class RoomDetailActivity extends AppCompatActivity {
         txtStatus = findViewById(R.id.txtStatus);
         txtDesc = findViewById(R.id.txtDesc);
 
-        String roomJson = getIntent().getStringExtra("room");
-        RoomModel room = new Gson().fromJson(roomJson, RoomModel.class);
+        // Nhận dữ liệu từ Intent
+        RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
 
-        txtRoomNumber.setText("Phòng " + room.getRoomNumber());
-        txtType.setText("Loại: " + room.getType());
-        txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
-        txtStatus.setText("Tình trạng: " + room.getStatus());
-        txtDesc.setText("Mô tả: " + room.getDescription());
-
-        Glide.with(this).load(room.getImageUrl()).into(imgRoom);
+        if (room != null) {
+            txtRoomNumber.setText("Phòng " + room.getRoomNumber());
+            txtType.setText("Loại: " + room.getType());
+            txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
+            txtStatus.setText("Tình trạng: " + room.getStatus());
+            txtDesc.setText("Mô tả: " + room.getDescription());
+            Glide.with(this).load(room.getImageUrl()).into(imgRoom);
+        } else {
+            Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 }

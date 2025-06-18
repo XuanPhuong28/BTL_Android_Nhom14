@@ -13,6 +13,7 @@
         android:theme="@style/Theme.Btl"
         tools:targetApi="31">
         <activity android:name=".cn2.RoomListActivity"/>
+        <activity android:name=".cn2.RoomDetailActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">
