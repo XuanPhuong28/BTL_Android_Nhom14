@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomListActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity {
 
     private Button btnPhong;
 
@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         btnPhong = findViewById(R.id.btnPhong);
 
         btnPhong.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, RoomListActivity.class));
+            startActivity(new Intent(AdminActivity.this, RoomListActivity.class));
         });
     }
 }
