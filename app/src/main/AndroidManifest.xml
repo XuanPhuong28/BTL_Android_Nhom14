@@ -14,6 +14,8 @@
         tools:targetApi="31">
         <activity android:name=".cn2.RoomListActivity"/>
         <activity android:name=".cn2.RoomDetailActivity"/>
+        <activity android:name=".cn2.GuestRoomDetailActivity" />
+        <activity android:name=".cn2.BookingFormActivity" />
         <activity android:name=".AdminActivity"/>
         <activity android:name=".GuestActivity"/>
         <activity
