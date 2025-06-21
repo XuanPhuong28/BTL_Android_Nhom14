@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     android:padding="16dp">
 
     <LinearLayout
@@ -10,83 +12,106 @@
         android:orientation="vertical">
 
         <!-- Header -->
+        <!-- Thanh tiêu đề -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:orientation="horizontal"
+            android:background="#3E40F6"
             android:gravity="center_vertical"
-            android:paddingBottom="12dp">
+            android:paddingHorizontal="12dp"
+            android:layout_marginBottom="12dp">
 
             <ImageView
+                android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
-                android:contentDescription="Back"
-                android:layout_marginEnd="8dp" />
+                app:tint="#FFFFFF"
+                android:contentDescription="@string/back_description" />
 
             <TextView
-                android:layout_width="344dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#3E40F6"
-                android:padding="8dp"
-                android:text="DOOKIHOTEL"
+                android:text="@string/hotel_title"
+                android:gravity="center"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="20sp"/>
         </LinearLayout>
 
-        <!-- Room Image + Info -->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/banner4" />
 
+        <!-- Ảnh phòng -->
+        <ImageView
+            android:id="@+id/imgRoomBanner"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="12dp"
+            android:background="#DDDDDD" />
+
+        <!-- Thông tin phòng -->
         <TextView
+            android:id="@+id/txtRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="PHÒNG 201"
+            android:text=""
             android:textStyle="bold"
             android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginBottom="4dp" />
 
         <TextView
+            android:id="@+id/txtRoomPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Loại: Phòng thường\nGiá: 450.000 / ngày\nGiường: 1"
+            android:text=""
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txtRoomBeds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
             android:textSize="14sp"
-            android:layout_marginBottom="12dp" />
+            android:layout_marginBottom="16dp" />
 
-        <!-- Thông tin người dùng -->
+        <!-- Thông tin đặt phòng -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thông tin:"
+            android:text=""
             android:textStyle="bold"
+            android:textSize="16sp"
             android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/etFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Họ và tên"
             android:background="@drawable/rounded_bg"
-            android:padding="10dp"
+            android:padding="12dp"
             android:layout_marginBottom="8dp" />
 
         <EditText
+            android:id="@+id/etBirthDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Ngày sinh"
             android:background="@drawable/rounded_bg"
-            android:padding="10dp"
+            android:padding="12dp"
             android:layout_marginBottom="8dp" />
 
         <Spinner
+            android:id="@+id/spinnerGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/rounded_bg"
-            android:layout_marginBottom="8dp" />
+            android:minHeight="48dp"
+            android:padding="8dp" />
 
+        <!-- Chọn ngày -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -94,40 +119,45 @@
             android:layout_marginBottom="8dp">
 
             <EditText
+                android:id="@+id/etFromDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Từ ngày"
                 android:background="@drawable/rounded_bg"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:layout_marginEnd="4dp" />
 
             <EditText
+                android:id="@+id/etToDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Đến ngày"
                 android:background="@drawable/rounded_bg"
-                android:padding="10dp"
+                android:padding="12dp"
                 android:layout_marginStart="4dp" />
         </LinearLayout>
 
         <!-- Tổng tiền -->
         <TextView
+            android:id="@+id/tvTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tổng tiền:"
+            android:text="Tổng tiền: 0đ"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Nút Đặt phòng -->
+        <!-- Nút đặt phòng -->
         <Button
             android:id="@+id/btnConfirmBooking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Đặt phòng"
             android:textColor="#FFFFFF"
-            android:backgroundTint="#3E40F6"
-            android:background="@drawable/rounded_button" />
+            android:background="@drawable/rounded_button"
+            android:textStyle="bold"
+            android:textSize="16sp" />
     </LinearLayout>
 </ScrollView>

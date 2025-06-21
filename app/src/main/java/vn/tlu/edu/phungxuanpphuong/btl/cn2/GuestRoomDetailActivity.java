@@ -1,5 +1,6 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,8 +22,9 @@ public class GuestRoomDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_guest_room_detail); // Tên layout XML
+        setContentView(R.layout.activity_guest_room_detail);
 
+        // Ánh xạ view
         imgRoom = findViewById(R.id.imgRoom);
         txtRoomNumber = findViewById(R.id.txtRoomNumber);
         txtType = findViewById(R.id.txtType);
@@ -30,7 +32,7 @@ public class GuestRoomDetailActivity extends AppCompatActivity {
         txtBeds = findViewById(R.id.txtBeds);
         btnBook = findViewById(R.id.btnBook);
 
-        // Nhận dữ liệu phòng
+        // Nhận dữ liệu phòng từ Intent
         RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
 
         if (room != null) {
@@ -39,25 +41,33 @@ public class GuestRoomDetailActivity extends AppCompatActivity {
             txtPrice.setText("Giá: " + formatCurrency(room.getPrice()) + " / ngày");
             txtBeds.setText("Giường: " + extractBeds(room.getDescription()));
 
+            // Load ảnh bằng Glide
             Glide.with(this)
                     .load(room.getImageUrl())
                     .placeholder(R.drawable.ic_launcher_background)
                     .into(imgRoom);
+
+            // Sự kiện nút "Đặt phòng"
+            btnBook.setOnClickListener(v -> {
+                Intent intent = new Intent(GuestRoomDetailActivity.this, BookingFormActivity.class);
+                intent.putExtra("room", room);
+                startActivity(intent);
+            });
 
         } else {
             Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
             finish();
         }
 
-        btnBook.setOnClickListener(v -> {
-            Toast.makeText(this, "Chuyển sang đặt phòng...", Toast.LENGTH_SHORT).show();
-            // TODO: Chuyển đến màn đặt phòng
-        });
+        // Xử lý nút quay lại (nếu có)
         ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> onBackPressed());
+        }
     }
 
     private String extractBeds(String desc) {
+        if (desc == null) return "-";
         if (desc.contains("1 giường")) return "1";
         else if (desc.contains("2 giường")) return "2";
         else return "-";
