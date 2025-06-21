@@ -48,11 +48,9 @@ public class RoomDetailActivity extends AppCompatActivity {
         RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
 
         if (room != null) {
-
             txtRoomNumber.setText("Phòng " + room.getRoomNumber());
             txtType.setText("Loại: " + room.getType());
             txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
-            txtStatus.setText("Tình trạng: " + room.getStatus());
             txtDesc.setText("Mô tả: " + room.getDescription());
 
             // Load ảnh nếu có
@@ -63,15 +61,19 @@ public class RoomDetailActivity extends AppCompatActivity {
                         .into(imgRoom);
             }
 
-            // Lấy thông tin booking nếu là đã đặt hoặc đã ở
-            if (room.getStatus().equals("Đã đặt") || room.getStatus().equals("Đã ở")) {
-                Log.d("DEBUG", "room.getRoomNumber() = " + room.getRoomNumber());
-                String roomKey = room.getRoomNumber().replaceAll("[^\\d]", ""); // Lấy số từ chuỗi
-                Log.d("DEBUG", "RoomKey dùng để truy vấn bookings: " + roomKey);
-                getBookingInfoByRoomNumber(roomKey);
+            // Hiển thị tình trạng và gọi thông tin booking nếu cần
+            String status = room.getStatus();
+            if ("booked".equals(status)) {
+                txtStatus.setText("Tình trạng: Đã đặt");
+                getBookingInfoByRoomNumber(room.getRoomNumber());
+            } else if ("in-use".equals(status)) {
+                txtStatus.setText("Tình trạng: Đã ở");
+                getBookingInfoByRoomNumber(room.getRoomNumber());
             } else {
+                txtStatus.setText("Tình trạng: Trống");
                 txtCustomerName.setText("Chưa có thông tin đặt phòng.");
             }
+
         } else {
             Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
             finish();
@@ -80,10 +82,11 @@ public class RoomDetailActivity extends AppCompatActivity {
 
     private void getBookingInfoByRoomNumber(String roomNumber) {
         Log.d("DEBUG", "Đang truy vấn booking cho phòng: " + roomNumber);
+        String roomKey = roomNumber;
 
         DatabaseReference bookingRef = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference("bookings")
-                .child(roomNumber); // bookings/205
+                .child(roomKey);
 
         bookingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -106,7 +109,7 @@ public class RoomDetailActivity extends AppCompatActivity {
                     txtPayment.setText("Thanh toán: " + payment);
                     txtPhone.setText("SĐT: " + phone);
                 } else {
-                    Log.d("DEBUG", "Không tìm thấy thông tin đặt phòng cho phòng: " + roomNumber);
+                    Log.d("DEBUG", "Không tìm thấy thông tin đặt phòng cho phòng: " + roomKey);
                     txtCustomerName.setText("Chưa có thông tin đặt phòng.");
                     txtCheckInDate.setText("");
                     txtCheckOutDate.setText("");
