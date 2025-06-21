@@ -78,6 +78,9 @@ public class RoomDetailActivity extends AppCompatActivity {
             Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
             finish();
         }
+
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
     }
 
     private void getBookingInfoByRoomNumber(String roomNumber) {
