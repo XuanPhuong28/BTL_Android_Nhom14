@@ -1,6 +1,7 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,8 @@ import java.util.List;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder> {
-    private List<RoomModel> roomList;
-    private Context context;
+    private final List<RoomModel> roomList;
+    private final Context context;
 
     public RoomAdapter(List<RoomModel> roomList, Context context) {
         this.roomList = roomList;
@@ -46,6 +47,13 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
                 .load(room.getImageUrl())
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.imgRoom);
+
+        // ✅ Sự kiện click để mở chi tiết phòng
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, GuestRoomDetailActivity.class);
+            intent.putExtra("room", room); // Truyền RoomModel
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -71,4 +79,3 @@ public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder
         return String.format("%,dđ", price).replace(",", ".");
     }
 }
-
