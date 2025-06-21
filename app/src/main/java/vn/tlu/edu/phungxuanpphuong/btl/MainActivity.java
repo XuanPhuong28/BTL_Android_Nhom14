@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomListActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomManageActivity;
+//import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomDetailActivity;
 
 public class MainActivity extends AppCompatActivity {
 

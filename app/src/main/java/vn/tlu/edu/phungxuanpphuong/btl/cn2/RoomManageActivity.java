@@ -13,9 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import vn.tlu.edu.phungxuanpphuong.btl.MainActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
-//import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomDetailActivity;
-
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
