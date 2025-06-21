@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomListActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomManageActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class AdminActivity extends AppCompatActivity {
 
     private Button btnPhong;
     private Button btnManageRoom;
@@ -23,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
         btnPhong = findViewById(R.id.btnPhong);
         btnManageRoom = findViewById(R.id.btnManageRoom);
         btnPhong.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, RoomListActivity.class));
+            startActivity(new Intent(AdminActivity.this, RoomListActivity.class));
         });
 
         btnManageRoom.setOnClickListener(v -> {
-            startActivity(new Intent(MainActivity.this, RoomManageActivity.class));
+            startActivity(new Intent(AdminActivity.this, RoomManageActivity.class));
         });
     }
 }
