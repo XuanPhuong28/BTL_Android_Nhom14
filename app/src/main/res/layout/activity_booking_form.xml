@@ -11,31 +11,45 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header -->
+        <!-- Thanh tiêu đề -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3E40F6"
-            android:padding="12dp"
             android:orientation="horizontal"
+            android:padding="12dp"
             android:gravity="center_vertical">
 
+            <!-- Nút quay lại -->
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
-                android:contentDescription="@string/back_description"
+                android:contentDescription="Quay lại"
                 app:tint="#FFFFFF" />
 
+            <!-- Tiêu đề giữa màn hình -->
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/hotel_title"
-                android:gravity="center"
+                android:layout_weight="1"
+                android:text="DOKKIHOTEL"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
+                android:gravity="center"
                 android:textSize="20sp" />
+
+            <!-- Nút logout -->
+            <ImageView
+                android:id="@+id/btnLogout"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/outline_contacts_product_24"
+                android:background="@android:color/white"
+                android:contentDescription="Đăng xuất"
+                android:padding="6dp"
+                app:tint="#3E40F6" />
         </LinearLayout>
 
         <!-- Ảnh phòng -->
@@ -136,7 +150,8 @@
             android:id="@+id/spinnerPayment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:minHeight="48dp" />
 
         <!-- Tổng tiền -->
         <TextView

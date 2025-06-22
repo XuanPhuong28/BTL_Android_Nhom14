@@ -9,9 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,6 +35,13 @@ public class BookingFormActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_form);
 
+        ImageView btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut(); // Nếu dùng Firebase Auth
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
+
         // Ánh xạ View
         imgRoomBanner = findViewById(R.id.imgRoomBanner);
         btnBack = findViewById(R.id.btnBack);
@@ -50,6 +59,7 @@ public class BookingFormActivity extends AppCompatActivity {
 
         // Nút quay lại
         btnBack.setOnClickListener(v -> onBackPressed());
+
 
         // Nhận thông tin phòng
         room = (RoomModel) getIntent().getSerializableExtra("room");
@@ -94,8 +104,9 @@ public class BookingFormActivity extends AppCompatActivity {
         try {
             Date from = sdf.parse(etCheckIn.getText().toString());
             Date to = sdf.parse(etCheckOut.getText().toString());
-            long days = (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24);
-            if (days > 0) {
+            long diff = to.getTime() - from.getTime();
+            if (diff >= 0) {
+                long days = Math.max(diff / (1000 * 60 * 60 * 24), 1); // Luôn >= 1 ngày
                 int total = (int) (days * room.getPrice());
                 tvTotal.setText("Tổng tiền: " + formatCurrency(total));
             } else {
@@ -134,11 +145,12 @@ public class BookingFormActivity extends AppCompatActivity {
                         String ciStr = String.valueOf(snap.child("check_in").getValue());
                         String coStr = String.valueOf(snap.child("check_out").getValue());
 
-                        if (ciStr.equals("null") || coStr.equals("null")) continue;
+                        if (ciStr == null || coStr == null || ciStr.isEmpty() || coStr.isEmpty()) continue;
 
                         Date ci = sdf.parse(ciStr);
                         Date co = sdf.parse(coStr);
 
+                        // Kiểm tra trùng thời gian
                         if (!(newCheckOut.before(ci) || newCheckIn.after(co))) {
                             conflict = true;
                             break;
