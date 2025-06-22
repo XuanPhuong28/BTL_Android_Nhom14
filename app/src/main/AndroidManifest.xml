@@ -16,6 +16,7 @@
         <activity android:name=".cn2.RoomDetailActivity"/>
         <activity android:name=".cn2.GuestRoomDetailActivity" />
         <activity android:name=".cn2.BookingFormActivity" />
+        <activity android:name=".cn2.BookingSuccessActivity"/>
         <activity android:name=".AdminActivity"/>
         <activity android:name=".GuestActivity"/>
         <activity

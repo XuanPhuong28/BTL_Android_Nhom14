@@ -29,7 +29,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         txtDesc = findViewById(R.id.txtDesc);
 
         // Nhận dữ liệu từ Intent
-        RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
+        RoomModel room = (RoomModel) getIntent().getSerializableExtra("rooms");
 
         if (room != null) {
             txtRoomNumber.setText("Phòng " + room.getRoomNumber());
