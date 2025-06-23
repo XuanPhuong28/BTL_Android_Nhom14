@@ -45,5 +45,32 @@
             android:id="@+id/txtDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+
+        <!-- sửa xóa -->
+        <LinearLayout
+            android:id="@+id/manageButtons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginTop="24dp"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sửa"
+                android:layout_marginEnd="12dp" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xóa" />
+        </LinearLayout>
+
+
     </LinearLayout>
 </ScrollView>

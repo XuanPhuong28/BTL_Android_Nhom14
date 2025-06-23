@@ -1,10 +1,9 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.cn5;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +25,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomManageActivity;
+import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
 
 public class AddRoomActivity extends AppCompatActivity {
 
@@ -75,7 +76,7 @@ public class AddRoomActivity extends AppCompatActivity {
 
         // Lấy thông tin sửa phòng nếu có
         isEditing = getIntent().getBooleanExtra("isEditing", false);
-        roomModel = (RoomModel) getIntent().getSerializableExtra("room");
+        roomModel = (RoomModel) getIntent().getSerializableExtra("roomModel");
 
         if (isEditing && roomModel != null) {
             // Hiển thị dữ liệu phòng lên UI
@@ -142,7 +143,7 @@ public class AddRoomActivity extends AppCompatActivity {
                 return;
             }
 
-            String roomId = "room" + roomCode;
+            String roomId = roomCode;
 
             DatabaseReference ref = FirebaseDatabase
                     .getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")

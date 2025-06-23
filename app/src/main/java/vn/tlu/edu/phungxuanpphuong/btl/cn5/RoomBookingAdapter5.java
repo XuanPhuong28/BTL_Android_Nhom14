@@ -1,26 +1,34 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.cn5;
+
 
 import android.content.Context;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.List;
-import vn.tlu.edu.phungxuanpphuong.btl.R;
 
-public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.RoomViewHolder> {
+import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
+
+public class RoomBookingAdapter5 extends RecyclerView.Adapter<vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder> {
+
     private List<RoomModel> roomList;
     private Context context;
-    private OnItemClickListener listener;
+    private vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(RoomModel room);
     }
 
-    public RoomBookingAdapter(List<RoomModel> roomList, Context context, OnItemClickListener listener) {
+    public RoomBookingAdapter5(List<RoomModel> roomList, Context context, vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.OnItemClickListener listener) {
         this.roomList = roomList;
         this.context = context;
         this.listener = listener;
@@ -28,19 +36,20 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
 
     @NonNull
     @Override
-    public RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_room, parent, false);
-        return new RoomViewHolder(view);
+        return new vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RoomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder holder, int position) {
         RoomModel room = roomList.get(position);
         holder.txtRoomNumber.setText("Phòng " + room.getRoomNumber());
         holder.txtType.setText("Loại: " + room.getType());
-        holder.txtBeds.setText("Mô tả: " + room.getDescription());
+        holder.txtBeds.setText("Số giường: " + room.getBeds());
         holder.txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
         holder.txtStatus.setText("Tình trạng: " + room.getStatus());
+        holder.txtDescription.setText("Mô tả: " + room.getDescription());
 
         Glide.with(context)
                 .load(room.getImageUrl())
@@ -56,7 +65,7 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
     }
 
     public static class RoomViewHolder extends RecyclerView.ViewHolder {
-        TextView txtRoomNumber, txtType, txtBeds, txtPrice, txtStatus;
+        TextView txtRoomNumber, txtType, txtBeds, txtPrice, txtStatus, txtDescription;
         ImageView imgRoom;
 
         public RoomViewHolder(@NonNull View itemView) {
@@ -66,6 +75,7 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
             txtBeds = itemView.findViewById(R.id.txtRoomBeds);
             txtPrice = itemView.findViewById(R.id.txtRoomPrice);
             txtStatus = itemView.findViewById(R.id.txtRoomStatus);
+            txtDescription = itemView.findViewById(R.id.txtRoomDesc); // Thêm mô tả
             imgRoom = itemView.findViewById(R.id.imgRoom);
         }
     }
@@ -74,5 +84,5 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
         roomList = newList;
         notifyDataSetChanged();
     }
-
 }
+

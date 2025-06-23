@@ -15,9 +15,10 @@
         <activity android:name=".cn2.RoomListActivity"/>
         <activity android:name=".cn2.RoomDetailActivity"/>
 
-
-        <activity android:name=".cn2.RoomManageActivity"/>
-        <activity android:name=".cn2.AddRoomActivity"/>
+        <activity android:name=".cn5.RoomListActivity5"/>
+        <activity android:name=".cn5.RoomDetailActivity5"/>
+        <activity android:name=".cn5.RoomManageActivity"/>
+        <activity android:name=".cn5.AddRoomActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

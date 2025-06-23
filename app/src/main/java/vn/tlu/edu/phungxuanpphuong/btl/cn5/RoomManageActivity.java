@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.cn5;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import vn.tlu.edu.phungxuanpphuong.btl.MainActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5;
+import vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomDetailActivity5;
+import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
+
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -22,7 +25,7 @@ import java.util.List;
 
 public class RoomManageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private RoomBookingAdapter adapter;
+    private RoomBookingAdapter5 adapter;
     private List<RoomModel> roomList;
     private Spinner spinnerType, spinnerStatus;
     private Button btnApply;
@@ -40,9 +43,9 @@ public class RoomManageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         roomList = new ArrayList<>();
-        adapter = new RoomBookingAdapter(roomList, this, room -> {
+        adapter = new RoomBookingAdapter5(roomList, this, room -> {
 
-            Intent intent = new Intent(RoomManageActivity.this, RoomDetailActivity.class);
+            Intent intent = new Intent(RoomManageActivity.this, RoomDetailActivity5.class);
             intent.putExtra("room", room); // room là đối tượng RoomModel
             intent.putExtra("fromManager", true);    // flag xác định là quản lý
 
