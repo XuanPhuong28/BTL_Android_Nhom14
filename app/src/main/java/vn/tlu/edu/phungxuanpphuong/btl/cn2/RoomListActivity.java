@@ -1,5 +1,6 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -18,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
@@ -28,7 +31,9 @@ public class RoomListActivity extends AppCompatActivity {
     private RoomBookingAdapter adapter;
     private List<RoomModel> roomList = new ArrayList<>();
     private List<RoomModel> originalRoomList = new ArrayList<>();
-    private Spinner spinnerType, spinnerStatus;
+    private Spinner spinnerStatus;
+    private TextView txtDateFilter;
+    private String selectedDate = null;
     private Button btnApply;
 
     private ActivityResultLauncher<Intent> roomDetailLauncher;
@@ -40,7 +45,7 @@ public class RoomListActivity extends AppCompatActivity {
 
         // Ánh xạ view
         recyclerView = findViewById(R.id.recyclerView);
-        spinnerType = findViewById(R.id.spinnerType);
+        txtDateFilter = findViewById(R.id.txtDateFilter);
         spinnerStatus = findViewById(R.id.spinnerStatus);
         btnApply = findViewById(R.id.btnApply);
         ImageView btnBack = findViewById(R.id.btnBack);
@@ -66,11 +71,22 @@ public class RoomListActivity extends AppCompatActivity {
                     }
                 });
 
-        // Spinner loại phòng
-        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(
-                this, R.array.room_types, android.R.layout.simple_spinner_item);
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerType.setAdapter(typeAdapter);
+        // Date
+        txtDateFilter.setOnClickListener(v -> {
+            Calendar calendar = Calendar.getInstance();
+            DatePickerDialog dialog = new DatePickerDialog(RoomListActivity.this,
+                    (view, year, month, dayOfMonth) -> {
+                        month++; // vì month bắt đầu từ 0
+                        selectedDate = String.format("%04d-%02d-%02d", year, month, dayOfMonth);
+                        txtDateFilter.setText("Ngày: " + selectedDate);
+                        applyFilter();
+                    },
+                    calendar.get(Calendar.YEAR),
+                    calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)
+            );
+            dialog.show();
+        });
 
         // Spinner trạng thái phòng
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(
@@ -109,14 +125,18 @@ public class RoomListActivity extends AppCompatActivity {
     }
 
     private void applyFilter() {
-        String selectedType = spinnerType.getSelectedItem().toString();
         String selectedStatus = spinnerStatus.getSelectedItem().toString();
 
         List<RoomModel> filtered = new ArrayList<>();
         for (RoomModel room : originalRoomList) {
-            boolean matchType = selectedType.equals("Tất cả") || room.getType().equals(selectedType);
             boolean matchStatus = selectedStatus.equals("Tất cả") || room.getStatus().equals(selectedStatus);
-            if (matchType && matchStatus) {
+
+            boolean matchDate = true;
+            if (selectedDate != null && room.getCreatedAt() != null) {
+                matchDate = room.getCreatedAt().startsWith(selectedDate);
+            }
+
+            if (matchStatus && matchDate) {
                 filtered.add(room);
             }
         }
@@ -125,4 +145,8 @@ public class RoomListActivity extends AppCompatActivity {
         roomList.addAll(filtered);
         adapter.notifyDataSetChanged();
     }
-}
+
+
+
+    }
+

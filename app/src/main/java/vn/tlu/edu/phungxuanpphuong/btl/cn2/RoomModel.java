@@ -10,6 +10,9 @@ public class RoomModel implements Serializable {
     private String status;
     private String description;
     private String imageUrl;
+    private String createdAt; // yyyy-MM-ddTHH:mm:ssZ
+
+
 
     private BookingModel booking;
     public RoomModel() {
@@ -36,7 +39,7 @@ public class RoomModel implements Serializable {
     public BookingModel getBooking() {
         return booking;
     }
-
+    public String getCreatedAt() { return createdAt;}
     public void setRoomId(String roomId) { this.roomId = roomId; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
     public void setType(String type) { this.type = type; }
