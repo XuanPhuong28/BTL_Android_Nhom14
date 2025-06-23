@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -17,12 +19,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class RoomDetailActivity extends AppCompatActivity {
     private ImageView imgRoom;
     private TextView txtRoomNumber, txtType, txtPrice, txtStatus, txtDesc;
     private TextView txtCustomerName, txtCheckInDate, txtCheckOutDate, txtGuests, txtPayment, txtPhone;
+    private RecyclerView recyclerBookings;
+    private List<BookingModel> bookingList = new ArrayList<>();
+    private BookingAdapter bookingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +51,11 @@ public class RoomDetailActivity extends AppCompatActivity {
         txtGuests = findViewById(R.id.txtGuests);
         txtPayment = findViewById(R.id.txtPayment);
         txtPhone = findViewById(R.id.txtPhone);
+
+        recyclerBookings = findViewById(R.id.recyclerBookings);
+        recyclerBookings.setLayoutManager(new LinearLayoutManager(this));
+        bookingAdapter = new BookingAdapter(bookingList);
+        recyclerBookings.setAdapter(bookingAdapter);
 
         // Nhận dữ liệu phòng
         RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
@@ -89,7 +102,7 @@ public class RoomDetailActivity extends AppCompatActivity {
 
         DatabaseReference bookingRef = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference("bookings")
-                .child(roomKey);
+                .child(roomNumber);
 
         bookingRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -97,22 +110,32 @@ public class RoomDetailActivity extends AppCompatActivity {
                 Log.d("DEBUG", "snapshot.exists() = " + snapshot.exists());
                 Log.d("DEBUG", "snapshot value = " + new Gson().toJson(snapshot.getValue()));
 
-                if (snapshot.exists()) {
-                    String customerName = snapshot.child("customer_name").getValue(String.class);
-                    String checkIn = snapshot.child("check_in").getValue(String.class);
-                    String checkOut = snapshot.child("check_out").getValue(String.class);
-                    String guests = snapshot.child("guests").getValue(String.class);
-                    String payment = snapshot.child("payment").getValue(String.class);
-                    String phone = snapshot.child("customer_phone").getValue(String.class);
+                bookingList.clear();
+                boolean shown = false;
 
-                    txtCustomerName.setText("Khách hàng: " + customerName);
-                    txtCheckInDate.setText("Ngày nhận phòng: " + checkIn);
-                    txtCheckOutDate.setText("Ngày trả phòng: " + checkOut);
-                    txtGuests.setText("Số lượng khách: " + guests);
-                    txtPayment.setText("Thanh toán: " + payment);
-                    txtPhone.setText("SĐT: " + phone);
-                } else {
-                    Log.d("DEBUG", "Không tìm thấy thông tin đặt phòng cho phòng: " + roomKey);
+
+                for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
+                    BookingModel booking = bookingSnapshot.getValue(BookingModel.class);
+
+                    if (booking != null) {
+                        booking.setRoomId(roomNumber);
+                        booking.setBookingId(bookingSnapshot.getKey());
+                        bookingList.add(booking);
+
+                        // Hiển thị booking đầu tiên có trạng thái phù hợp lên các TextView
+                        if (!shown && ("Đã đặt".equals(booking.getStatus()) || "Đã ở".equals(booking.getStatus()))) {
+                            txtCustomerName.setText("Khách hàng: " + booking.getCustomer_name());
+                            txtCheckInDate.setText("Ngày nhận phòng: " + booking.getCheck_in());
+                            txtCheckOutDate.setText("Ngày trả phòng: " + booking.getCheck_out());
+                            txtGuests.setText("Số lượng khách: " + booking.getGuests());
+                            txtPayment.setText("Thanh toán: " + booking.getPayment());
+                            txtPhone.setText("SĐT: " + booking.getCustomer_phone());
+                            shown = true;
+                        }
+                    }
+                }
+
+                if (!shown) {
                     txtCustomerName.setText("Chưa có thông tin đặt phòng.");
                     txtCheckInDate.setText("");
                     txtCheckOutDate.setText("");
@@ -120,6 +143,8 @@ public class RoomDetailActivity extends AppCompatActivity {
                     txtPayment.setText("");
                     txtPhone.setText("");
                 }
+
+                bookingAdapter.notifyDataSetChanged();
             }
 
             @Override

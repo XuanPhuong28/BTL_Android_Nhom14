@@ -11,6 +11,7 @@ public class RoomModel implements Serializable {
     private String description;
     private String imageUrl;
 
+    private BookingModel booking;
     public RoomModel() {
         // Required for Firebase
     }
@@ -32,6 +33,9 @@ public class RoomModel implements Serializable {
     public String getStatus() { return status; }
     public String getDescription() { return description; }
     public String getImageUrl() { return imageUrl; }
+    public BookingModel getBooking() {
+        return booking;
+    }
 
     public void setRoomId(String roomId) { this.roomId = roomId; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
@@ -40,4 +44,7 @@ public class RoomModel implements Serializable {
     public void setStatus(String status) { this.status = status; }
     public void setDescription(String description) { this.description = description; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setBooking(BookingModel booking) {
+        this.booking = booking;
+    }
 }
