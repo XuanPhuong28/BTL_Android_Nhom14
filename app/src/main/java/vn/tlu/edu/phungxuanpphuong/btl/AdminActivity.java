@@ -14,7 +14,7 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main1);
+        setContentView(R.layout.activity_admin);
 
         btnPhong = findViewById(R.id.btnPhong);
 

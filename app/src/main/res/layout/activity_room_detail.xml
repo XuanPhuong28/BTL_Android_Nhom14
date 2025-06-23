@@ -65,9 +65,9 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/txtRoomNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtRoomNumber"
                     android:text="Phòng 101"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -75,30 +75,30 @@
                     android:textColor="#000000" />
 
                 <TextView
+                    android:id="@+id/txtType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtType"
                     android:text="Loại: VIP"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtPrice"
                     android:text="Giá: 1.000.000đ/ngày"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtStatus"
                     android:text="Tình trạng: Còn trống"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtDesc"
                     android:text="Mô tả: 2 giường lớn"
                     android:layout_marginBottom="4dp" />
             </LinearLayout>
@@ -127,53 +127,74 @@
                     android:layout_marginBottom="8dp" />
 
                 <TextView
+                    android:id="@+id/txtCustomerName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtCustomerName"
                     android:text="Khách hàng: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtGuests"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtGuests"
                     android:text="Số khách: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtPayment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtPayment"
                     android:text="Thanh toán: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtPhone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtPhone"
                     android:text="SĐT: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtCheckInDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtCheckInDate"
                     android:text="Ngày nhận phòng: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
+                    android:id="@+id/txtCheckOutDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/txtCheckOutDate"
                     android:text="Ngày trả phòng: "
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <!-- Danh sách tất cả đặt phòng -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danh sách tất cả đặt phòng"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#3F51B5"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Đây là view bạn đang thiếu -->
+        <LinearLayout
+            android:id="@+id/bookingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:divider="?android:attr/dividerHorizontal"
+            android:showDividers="middle"
+            android:paddingBottom="16dp"/>
     </LinearLayout>
 </ScrollView>
