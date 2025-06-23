@@ -3,8 +3,6 @@ package vn.tlu.edu.phungxuanpphuong.btl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomListActivity;
@@ -23,6 +21,5 @@ public class AdminActivity extends AppCompatActivity {
         btnPhong.setOnClickListener(v -> {
             startActivity(new Intent(AdminActivity.this, RoomListActivity.class));
         });
-
     }
 }

@@ -12,21 +12,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Btl"
         tools:targetApi="31">
-        <activity android:name=".cn2.RoomListActivity"/>
-        <activity android:name=".cn2.RoomDetailActivity"/>
+
+        <!-- Các activity -->
+        <activity android:name=".cn2.RoomListActivity" />
+        <activity android:name=".cn2.RoomDetailActivity" />
         <activity android:name=".cn2.GuestRoomDetailActivity" />
         <activity android:name=".cn2.BookingFormActivity" />
-        <activity android:name=".AdminActivity"/>
-        <activity android:name=".GuestActivity"/>
+        <activity android:name=".AdminActivity" />
+        <activity android:name=".GuestActivity" />
+        <activity android:name=".cn2.RoomManageActivity" />
+        <activity android:name=".cn2.AddRoomActivity" />
+
+        <!-- Activity khởi động -->
         <activity
             android:name=".cn1.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
