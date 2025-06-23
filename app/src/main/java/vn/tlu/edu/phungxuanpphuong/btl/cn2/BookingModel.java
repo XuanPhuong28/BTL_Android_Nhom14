@@ -1,6 +1,7 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 public class BookingModel {
+    private String roomNumber;
     private String type;
     private int beds;
     private int price;
@@ -19,6 +20,8 @@ public class BookingModel {
     }
 
     // Getter & Setter đầy đủ
+    public String getRoomNumber() { return roomNumber; }
+
     public String getType() { return type; }
     public int getBeds() { return beds; }
     public int getPrice() { return price; }
@@ -31,6 +34,8 @@ public class BookingModel {
     public String getCustomer_phone() { return customer_phone; }
     public String getRoomId() { return roomId; }
     public String getBookingId() { return bookingId; }
+
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
     public void setType(String type) { this.type = type; }
     public void setBeds(int beds) { this.beds = beds; }
     public void setPrice(int price) { this.price = price; }

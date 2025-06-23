@@ -105,26 +105,10 @@
         </androidx.cardview.widget.CardView>
 
         <!-- CardView: Thông tin đặt phòng -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            card_view:cardCornerRadius="12dp"
-            card_view:cardElevation="4dp"
-            android:padding="16dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thông tin KH đặt phòng"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:textColor="#3F51B5"
-                    android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -174,13 +158,12 @@
                     android:textSize="16sp"
                     android:layout_marginBottom="4dp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
         <!-- RecyclerView: Danh sách tất cả bookings -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lịch sử đặt phòng"
+            android:text="Danh sách đặt phòng"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="#3F51B5"

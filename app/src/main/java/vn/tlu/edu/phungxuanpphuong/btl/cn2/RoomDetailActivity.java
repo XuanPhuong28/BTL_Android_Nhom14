@@ -54,7 +54,10 @@ public class RoomDetailActivity extends AppCompatActivity {
 
         recyclerBookings = findViewById(R.id.recyclerBookings);
         recyclerBookings.setLayoutManager(new LinearLayoutManager(this));
-        bookingAdapter = new BookingAdapter(bookingList);
+        bookingAdapter = new BookingAdapter(bookingList, this, () -> {
+            setResult(RESULT_OK);
+            finish();
+        });
         recyclerBookings.setAdapter(bookingAdapter);
 
         // Nhận dữ liệu phòng
@@ -119,6 +122,7 @@ public class RoomDetailActivity extends AppCompatActivity {
 
                     if (booking != null) {
                         booking.setRoomId(roomNumber);
+                        booking.setRoomNumber(roomNumber);
                         booking.setBookingId(bookingSnapshot.getKey());
                         bookingList.add(booking);
 
@@ -135,14 +139,13 @@ public class RoomDetailActivity extends AppCompatActivity {
                     }
                 }
 
-                if (!shown) {
                     txtCustomerName.setText("Chưa có thông tin đặt phòng.");
                     txtCheckInDate.setText("");
                     txtCheckOutDate.setText("");
                     txtGuests.setText("");
                     txtPayment.setText("");
                     txtPhone.setText("");
-                }
+
 
                 bookingAdapter.notifyDataSetChanged();
             }
