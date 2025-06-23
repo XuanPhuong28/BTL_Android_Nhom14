@@ -1,17 +1,23 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 import android.content.Context;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.List;
+
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.RoomViewHolder> {
+
     private List<RoomModel> roomList;
     private Context context;
     private OnItemClickListener listener;
@@ -38,9 +44,10 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
         RoomModel room = roomList.get(position);
         holder.txtRoomNumber.setText("Phòng " + room.getRoomNumber());
         holder.txtType.setText("Loại: " + room.getType());
-        holder.txtBeds.setText("Mô tả: " + room.getDescription());
+        holder.txtBeds.setText("Số giường: " + room.getBeds());
         holder.txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
         holder.txtStatus.setText("Tình trạng: " + room.getStatus());
+        holder.txtDescription.setText("Mô tả: " + room.getDescription());
 
         Glide.with(context)
                 .load(room.getImageUrl())
@@ -56,7 +63,7 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
     }
 
     public static class RoomViewHolder extends RecyclerView.ViewHolder {
-        TextView txtRoomNumber, txtType, txtBeds, txtPrice, txtStatus;
+        TextView txtRoomNumber, txtType, txtBeds, txtPrice, txtStatus, txtDescription;
         ImageView imgRoom;
 
         public RoomViewHolder(@NonNull View itemView) {
@@ -66,6 +73,7 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
             txtBeds = itemView.findViewById(R.id.txtRoomBeds);
             txtPrice = itemView.findViewById(R.id.txtRoomPrice);
             txtStatus = itemView.findViewById(R.id.txtRoomStatus);
+            txtDescription = itemView.findViewById(R.id.txtRoomDesc); // Thêm mô tả
             imgRoom = itemView.findViewById(R.id.imgRoom);
         }
     }
@@ -74,5 +82,5 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
         roomList = newList;
         notifyDataSetChanged();
     }
-
 }
+

@@ -15,13 +15,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class RoomDetailActivity extends AppCompatActivity {
     private ImageView imgRoom;
     private TextView txtRoomNumber, txtType, txtPrice, txtStatus, txtDesc;
+    private LinearLayout manageButtons;
+    private Button btnEdit, btnDelete;
+
+    private RoomModel room;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +37,12 @@ public class RoomDetailActivity extends AppCompatActivity {
         txtPrice = findViewById(R.id.txtPrice);
         txtStatus = findViewById(R.id.txtStatus);
         txtDesc = findViewById(R.id.txtDesc);
+        manageButtons = findViewById(R.id.manageButtons);
+        btnEdit = findViewById(R.id.btnEdit);
+        btnDelete = findViewById(R.id.btnDelete);
 
-        // Nhận dữ liệu từ Intent
-        RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
+        // Nhận dữ liệu phòng
+        room = (RoomModel) getIntent().getSerializableExtra("room");
 
         if (room != null) {
             txtRoomNumber.setText("Phòng " + room.getRoomNumber());
@@ -44,50 +50,51 @@ public class RoomDetailActivity extends AppCompatActivity {
             txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
             txtStatus.setText("Tình trạng: " + room.getStatus());
             txtDesc.setText("Mô tả: " + room.getDescription());
+
             Glide.with(this).load(room.getImageUrl()).into(imgRoom);
         } else {
             Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
             finish();
+            return;
         }
 
+        // Quản lý mới được phép sửa/xoá
         boolean fromManager = getIntent().getBooleanExtra("fromManager", false);
-        LinearLayout manageButtons = findViewById(R.id.manageButtons);
-        Button btnEdit = findViewById(R.id.btnEdit);
-        Button btnDelete = findViewById(R.id.btnDelete);
+        manageButtons.setVisibility(fromManager ? View.VISIBLE : View.GONE);
 
-        if (fromManager) {
-            manageButtons.setVisibility(View.VISIBLE);
-        }
-
-        btnDelete.setOnClickListener(v -> {
-            new AlertDialog.Builder(RoomDetailActivity.this)
-                    .setTitle("Xác nhận xóa")
-                    .setMessage("Bạn có chắc muốn xóa phòng này?")
-                    .setPositiveButton("Xóa", (dialog, which) -> {
-                        // Thực hiện xóa nếu người dùng đồng ý
-                        String roomId = room.getRoomId();
-
-                        DatabaseReference ref = FirebaseDatabase
-                                .getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                                .getReference("rooms");
-
-                        ref.child(roomId).removeValue().addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(RoomDetailActivity.this, "Đã xóa phòng", Toast.LENGTH_SHORT).show();
-                                finish(); // Quay lại màn trước
-                            } else {
-                                Toast.makeText(RoomDetailActivity.this, "Lỗi khi xóa", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    })
-                    .setNegativeButton("Hủy", (dialog, which) -> dialog.dismiss())
-                    .show();
-        });
+        btnDelete.setOnClickListener(v -> showDeleteDialog());
         btnEdit.setOnClickListener(v -> {
             Intent intent = new Intent(RoomDetailActivity.this, AddRoomActivity.class);
-            intent.putExtra("roomModel", room); // Serializable
+            intent.putExtra("room", room); // Truyền room để sửa
             intent.putExtra("isEditing", true);
             startActivity(intent);
         });
+    }
+
+    private void showDeleteDialog() {
+        if (room.getRoomId() == null || room.getRoomId().isEmpty()) {
+            Toast.makeText(this, "Không thể xoá phòng không có ID!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xoá")
+                .setMessage("Bạn có chắc chắn muốn xoá phòng này?")
+                .setPositiveButton("Xoá", (dialog, which) -> {
+                    DatabaseReference ref = FirebaseDatabase
+                            .getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                            .getReference("rooms");
+
+                    ref.child(room.getRoomId()).removeValue().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Đã xoá phòng", Toast.LENGTH_SHORT).show();
+                            finish();
+                        } else {
+                            Toast.makeText(this, "Xoá thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                })
+                .setNegativeButton("Huỷ", null)
+                .show();
     }
 }

@@ -75,7 +75,7 @@ public class AddRoomActivity extends AppCompatActivity {
 
         // Lấy thông tin sửa phòng nếu có
         isEditing = getIntent().getBooleanExtra("isEditing", false);
-        roomModel = (RoomModel) getIntent().getSerializableExtra("roomModel");
+        roomModel = (RoomModel) getIntent().getSerializableExtra("room");
 
         if (isEditing && roomModel != null) {
             // Hiển thị dữ liệu phòng lên UI
