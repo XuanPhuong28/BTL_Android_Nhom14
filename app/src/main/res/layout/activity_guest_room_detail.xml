@@ -3,51 +3,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    android:padding="16dp">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Header -->
-        <LinearLayout
+        <!-- Thanh tiêu đề dùng RelativeLayout để căn giữa và phải -->
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2C2CF2"
-            android:padding="12dp"
-            android:gravity="center_vertical">
+            android:background="#3E40F6"
+            android:padding="12dp">
 
             <ImageView
                 android:id="@+id/btnBack"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="#FFFFFF"
-                android:contentDescription="@string/back_description" />
+                android:contentDescription="@string/back_description"
+                android:tint="#FFFFFF"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/txtTitle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/hotel_title"
-                android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
-                android:textSize="20sp"/>
-        </LinearLayout>
+                android:textSize="20sp"
+                android:layout_centerInParent="true" />
 
-        <!-- Phòng -->
+            <ImageView
+                android:id="@+id/btnLogout"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/outline_contacts_product_24"
+                android:background="@color/white"
+                android:contentDescription="Đăng xuất"
+                android:padding="6dp"
+                android:tint="#3E40F6"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+
+        <!-- Tên phòng -->
         <TextView
             android:id="@+id/txtRoomNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="PHÒNG ..."
             android:textSize="22sp"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="16dp"/>
 
+        <!-- Ảnh -->
         <ImageView
             android:id="@+id/imgRoom"
             android:layout_width="match_parent"
@@ -56,6 +71,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background" />
 
+        <!-- Loại & Giường -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,34 +84,41 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp"/>
+                android:text="Loại: ..." />
 
             <TextView
                 android:id="@+id/txtBeds"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="16sp"/>
+                android:text="Giường: ..." />
         </LinearLayout>
 
+        <!-- Giá -->
         <TextView
             android:id="@+id/txtPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:layout_marginTop="8dp"
-            android:textSize="16sp"/>
+            android:text="Giá: ..."
+            android:layout_marginTop="8dp" />
 
+        <!-- Mô tả -->
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mô tả: ..."
+            android:layout_marginTop="8dp" />
+
+        <!-- Nút đặt phòng -->
         <Button
             android:id="@+id/btnBook"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_book"
-            android:textColor="#FFFFFF"
-            android:background="#2C2CF2"
             android:layout_marginTop="16dp"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:backgroundTint="#3E40F6"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
 </ScrollView>

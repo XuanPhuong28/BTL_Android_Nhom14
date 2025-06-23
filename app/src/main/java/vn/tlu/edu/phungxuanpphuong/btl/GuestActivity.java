@@ -1,5 +1,6 @@
 package vn.tlu.edu.phungxuanpphuong.btl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +24,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomAdapter;
 import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
 
@@ -34,6 +37,13 @@ public class GuestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guest); // chứa RecyclerView
+
+        ImageView btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut(); // Nếu dùng Firebase Auth
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -1,66 +1,72 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.*;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class BookingFormActivity extends AppCompatActivity {
 
-    private ImageView imgRoomBanner;
-    private TextView txtRoomTitle, txtRoomPrice, txtRoomBeds, tvTotal;
-    private EditText etFullName, etBirthDate, etFromDate, etToDate;
-    private Spinner genderSpinner;
+    private ImageView imgRoomBanner, btnBack;
+    private TextView txtRoomTitle, txtRoomBeds, txtRoomPrice, tvTotal;
+    private EditText etFullName, etPhone, etGuests, etCheckIn, etCheckOut;
+    private Spinner spinnerPayment;
+    private Button btnSubmit;
 
-    private static final int PRICE_PER_DAY = 450000;
+    private RoomModel room;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    private Calendar checkInCal, checkOutCal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_form);
 
-        ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> onBackPressed());
+        ImageView btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut(); // Nếu dùng Firebase Auth
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
 
         // Ánh xạ View
         imgRoomBanner = findViewById(R.id.imgRoomBanner);
+        btnBack = findViewById(R.id.btnBack);
         txtRoomTitle = findViewById(R.id.txtRoomTitle);
-        txtRoomPrice = findViewById(R.id.txtRoomPrice);
         txtRoomBeds = findViewById(R.id.txtRoomBeds);
-        tvTotal = findViewById(R.id.tvTotalPrice);
+        txtRoomPrice = findViewById(R.id.txtRoomPrice);
+        tvTotal = findViewById(R.id.tvTotal);
         etFullName = findViewById(R.id.etFullName);
-        etBirthDate = findViewById(R.id.etBirthDate);
-        etFromDate = findViewById(R.id.etFromDate);
-        etToDate = findViewById(R.id.etToDate);
-        genderSpinner = findViewById(R.id.spinnerGender);
+        etPhone = findViewById(R.id.etPhone);
+        etGuests = findViewById(R.id.etGuests);
+        etCheckIn = findViewById(R.id.etCheckIn);
+        etCheckOut = findViewById(R.id.etCheckOut);
+        spinnerPayment = findViewById(R.id.spinnerPayment);
+        btnSubmit = findViewById(R.id.btnSubmit);
 
-        // Đổ dữ liệu Spinner Giới tính
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item,
-                new String[]{"Nam", "Nữ", "Khác"});
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        genderSpinner.setAdapter(adapter);
+        // Nút quay lại
+        btnBack.setOnClickListener(v -> onBackPressed());
+
 
         // Nhận thông tin phòng
-        RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
+        room = (RoomModel) getIntent().getSerializableExtra("room");
         if (room != null) {
             txtRoomTitle.setText("PHÒNG " + room.getRoomNumber());
+            txtRoomBeds.setText("Giường: " + room.getBeds());
             txtRoomPrice.setText("Giá: " + formatCurrency(room.getPrice()) + " / ngày");
-            txtRoomBeds.setText("Giường: " + extractBeds(room.getDescription()));
 
             Glide.with(this)
                     .load(room.getImageUrl())
@@ -68,46 +74,129 @@ public class BookingFormActivity extends AppCompatActivity {
                     .into(imgRoomBanner);
         }
 
-        // Tính tổng tiền khi chọn ngày
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        Runnable calculateTotal = () -> {
-            try {
-                String from = etFromDate.getText().toString();
-                String to = etToDate.getText().toString();
+        // Spinner thanh toán
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                new String[]{"Thanh toán tại chỗ nghỉ", "Chuyển khoản"});
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPayment.setAdapter(adapter);
 
-                if (!from.isEmpty() && !to.isEmpty()) {
-                    Date fromDate = sdf.parse(from);
-                    Date toDate = sdf.parse(to);
-                    long diff = toDate.getTime() - fromDate.getTime();
-                    long days = TimeUnit.MILLISECONDS.toDays(diff);
-                    if (days > 0) {
-                        long total = days * PRICE_PER_DAY;
-                        tvTotal.setText("Tổng tiền: " + formatCurrency((int) total));
-                    } else {
-                        tvTotal.setText("Tổng tiền: 0đ");
-                    }
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        };
+        checkInCal = Calendar.getInstance();
+        checkOutCal = Calendar.getInstance();
 
-        etFromDate.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) calculateTotal.run();
-        });
-        etToDate.setOnFocusChangeListener((v, hasFocus) -> {
-            if (!hasFocus) calculateTotal.run();
-        });
+        // Chọn ngày
+        etCheckIn.setOnClickListener(v -> showDate(etCheckIn, checkInCal));
+        etCheckOut.setOnClickListener(v -> showDate(etCheckOut, checkOutCal));
+
+        // Nút đặt phòng
+        btnSubmit.setOnClickListener(v -> submitBooking());
     }
 
-    private String extractBeds(String desc) {
-        if (desc == null) return "-";
-        if (desc.contains("1 giường")) return "1";
-        else if (desc.contains("2 giường")) return "2";
-        else return "-";
+    private void showDate(EditText field, Calendar cal) {
+        new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
+            cal.set(year, month, dayOfMonth);
+            field.setText(sdf.format(cal.getTime()));
+            updateTotal();
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    private void updateTotal() {
+        try {
+            Date from = sdf.parse(etCheckIn.getText().toString());
+            Date to = sdf.parse(etCheckOut.getText().toString());
+            long diff = to.getTime() - from.getTime();
+            if (diff >= 0) {
+                long days = Math.max(diff / (1000 * 60 * 60 * 24), 1); // Luôn >= 1 ngày
+                int total = (int) (days * room.getPrice());
+                tvTotal.setText("Tổng tiền: " + formatCurrency(total));
+            } else {
+                tvTotal.setText("Tổng tiền: 0đ");
+            }
+        } catch (Exception e) {
+            tvTotal.setText("Tổng tiền: 0đ");
+        }
+    }
+
+    private void submitBooking() {
+        String name = etFullName.getText().toString().trim();
+        String phone = etPhone.getText().toString().trim();
+        String guests = etGuests.getText().toString().trim();
+        String checkIn = etCheckIn.getText().toString().trim();
+        String checkOut = etCheckOut.getText().toString().trim();
+        String payment = spinnerPayment.getSelectedItem().toString();
+
+        if (name.isEmpty() || phone.isEmpty() || guests.isEmpty() || checkIn.isEmpty() || checkOut.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference ref = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("bookings").child(room.getRoomNumber());
+
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    Date newCheckIn = sdf.parse(checkIn);
+                    Date newCheckOut = sdf.parse(checkOut);
+                    boolean conflict = false;
+
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        String ciStr = String.valueOf(snap.child("check_in").getValue());
+                        String coStr = String.valueOf(snap.child("check_out").getValue());
+
+                        if (ciStr == null || coStr == null || ciStr.isEmpty() || coStr.isEmpty()) continue;
+
+                        Date ci = sdf.parse(ciStr);
+                        Date co = sdf.parse(coStr);
+
+                        // Kiểm tra trùng thời gian
+                        if (!(newCheckOut.before(ci) || newCheckIn.after(co))) {
+                            conflict = true;
+                            break;
+                        }
+                    }
+
+                    if (conflict) {
+                        Toast.makeText(BookingFormActivity.this, "Phòng đã được đặt trong khoảng thời gian này!", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // Nếu không trùng lịch
+                    Map<String, Object> booking = new HashMap<>();
+                    booking.put("customer_name", name);
+                    booking.put("customer_phone", phone);
+                    booking.put("guests", guests);
+                    booking.put("check_in", checkIn);
+                    booking.put("check_out", checkOut);
+                    booking.put("payment", payment);
+                    booking.put("room_type", room.getType());
+                    booking.put("beds", room.getBeds());
+                    booking.put("price_per_day", room.getPrice());
+                    booking.put("status", "Đã đặt");
+
+                    String key = ref.push().getKey();
+                    ref.child(key).setValue(booking).addOnSuccessListener(unused -> {
+                        startActivity(new Intent(BookingFormActivity.this, BookingSuccessActivity.class));
+                        finish();
+                    }).addOnFailureListener(e -> {
+                        Toast.makeText(BookingFormActivity.this, "Lỗi đặt phòng", Toast.LENGTH_SHORT).show();
+                    });
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(BookingFormActivity.this, "Lỗi xử lý ngày tháng", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(BookingFormActivity.this, "Không thể kiểm tra lịch phòng", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private String formatCurrency(int price) {
-        return String.format("%,d", price).replace(",", ".") + "đ";
+        return String.format(Locale.getDefault(), "%,d", price).replace(",", ".") + "đ";
     }
 }
