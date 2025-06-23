@@ -1,9 +1,9 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,185 +13,148 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
-public class RoomDetailActivity extends AppCompatActivity {
+    public class RoomDetailActivity extends AppCompatActivity {
 
-    private ImageView imgRoom;
-    private TextView txtRoomNumber, txtType, txtPrice, txtStatus, txtDesc;
-    private TextView txtCustomerName, txtCheckInDate, txtCheckOutDate, txtGuests, txtPayment, txtPhone;
-    private LinearLayout bookingContainer;
-    private String roomNumber;
+        private ImageView imgRoom;
+        private TextView txtRoomNumber, txtType, txtPrice, txtStatus, txtDesc;
+        private TextView txtCustomerName, txtCheckInDate, txtCheckOutDate, txtGuests, txtPayment, txtPhone;
+        private LinearLayout bookingContainer;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_detail);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_room_detail);
 
-        // Ánh xạ view
-        imgRoom = findViewById(R.id.imgRoom);
-        txtRoomNumber = findViewById(R.id.txtRoomNumber);
-        txtType = findViewById(R.id.txtType);
-        txtPrice = findViewById(R.id.txtPrice);
-        txtStatus = findViewById(R.id.txtStatus);
-        txtDesc = findViewById(R.id.txtDesc);
+            // Ánh xạ view
+            imgRoom = findViewById(R.id.imgRoom);
+            txtRoomNumber = findViewById(R.id.txtRoomNumber);
+            txtType = findViewById(R.id.txtType);
+            txtPrice = findViewById(R.id.txtPrice);
+            txtStatus = findViewById(R.id.txtStatus);
+            txtDesc = findViewById(R.id.txtDesc);
 
-        txtCustomerName = findViewById(R.id.txtCustomerName);
-        txtCheckInDate = findViewById(R.id.txtCheckInDate);
-        txtCheckOutDate = findViewById(R.id.txtCheckOutDate);
-        txtGuests = findViewById(R.id.txtGuests);
-        txtPayment = findViewById(R.id.txtPayment);
-        txtPhone = findViewById(R.id.txtPhone);
-        bookingContainer = findViewById(R.id.bookingContainer);
+            txtCustomerName = findViewById(R.id.txtCustomerName);
+            txtCheckInDate = findViewById(R.id.txtCheckInDate);
+            txtCheckOutDate = findViewById(R.id.txtCheckOutDate);
+            txtGuests = findViewById(R.id.txtGuests);
+            txtPayment = findViewById(R.id.txtPayment);
+            txtPhone = findViewById(R.id.txtPhone);
 
-        // Nhận dữ liệu phòng
-        RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
+            bookingContainer = findViewById(R.id.bookingContainer);
 
-        if (room != null) {
-            roomNumber = room.getRoomNumber();
-            txtRoomNumber.setText("Phòng " + roomNumber);
-            txtType.setText("Loại: " + room.getType());
-            txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
-            txtDesc.setText("Mô tả: " + room.getDescription());
+            // Nhận dữ liệu phòng
+            RoomModel room = (RoomModel) getIntent().getSerializableExtra("room");
 
-            if (room.getImageUrl() != null && !room.getImageUrl().isEmpty()) {
-                Glide.with(this).load(room.getImageUrl()).into(imgRoom);
+            if (room != null) {
+                txtRoomNumber.setText("Phòng " + room.getRoomNumber());
+                txtType.setText("Loại: " + room.getType());
+                txtPrice.setText("Giá: " + room.getPrice() + "đ/ngày");
+                txtDesc.setText("Mô tả: " + room.getDescription());
+
+                // Load ảnh
+                if (room.getImageUrl() != null && !room.getImageUrl().isEmpty()) {
+                    Glide.with(this)
+                            .load(room.getImageUrl())
+                            .placeholder(R.drawable.ic_launcher_background)
+                            .into(imgRoom);
+                }
+
+                // Trạng thái phòng
+                String status = room.getStatus();
+                if ("booked".equals(status)) {
+                    txtStatus.setText("Tình trạng: Đã đặt");
+                    getBookingInfoByRoomNumber(room.getRoomNumber());
+                } else if ("in-use".equals(status)) {
+                    txtStatus.setText("Tình trạng: Đã ở");
+                    getBookingInfoByRoomNumber(room.getRoomNumber());
+                } else {
+                    txtStatus.setText("Tình trạng: Trống");
+                    txtCustomerName.setText("Chưa có thông tin đặt phòng.");
+                }
+
+            } else {
+                Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
-            switch (room.getStatus()) {
-                case "booked": txtStatus.setText("Tình trạng: Đã đặt"); break;
-                case "in-use": txtStatus.setText("Tình trạng: Đã ở"); break;
-                default: txtStatus.setText("Tình trạng: Trống"); break;
-            }
-
-            loadBookings();
-        } else {
-            Toast.makeText(this, "Không có dữ liệu phòng", Toast.LENGTH_SHORT).show();
-            finish();
+            ImageView btnBack = findViewById(R.id.btnBack);
+            btnBack.setOnClickListener(v -> finish());
         }
 
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-    }
+        private void getBookingInfoByRoomNumber(String roomNumber) {
+            Log.d("DEBUG", "Đang truy vấn booking cho phòng: " + roomNumber);
 
-    private void loadBookings() {
-        bookingContainer.removeAllViews();
+            DatabaseReference bookingRef = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                    .getReference("bookings")
+                    .child(roomNumber);
 
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                .getReference("bookings").child(roomNumber);
+            bookingRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    bookingContainer.removeAllViews(); // clear cũ
 
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                boolean firstShown = false;
+                    LayoutInflater inflater = LayoutInflater.from(RoomDetailActivity.this);
+                    boolean foundFirstBooking = false;
 
-                for (DataSnapshot snap : snapshot.getChildren()) {
-                    BookingModel booking = snap.getValue(BookingModel.class);
-                    if (booking == null) continue;
+                    for (DataSnapshot bookingSnapshot : snapshot.getChildren()) {
+                        String status = bookingSnapshot.child("status").getValue(String.class);
+                        if ("Đã đặt".equals(status) || "Đã ở".equals(status)) {
+                            String customerName = bookingSnapshot.child("customer_name").getValue(String.class);
+                            String phone = bookingSnapshot.child("customer_phone").getValue(String.class);
+                            String guests = bookingSnapshot.child("guests").getValue(String.class);
+                            String payment = bookingSnapshot.child("payment").getValue(String.class);
+                            String checkIn = bookingSnapshot.child("check_in").getValue(String.class);
+                            String checkOut = bookingSnapshot.child("check_out").getValue(String.class);
 
-                    booking.setBookingId(snap.getKey());
-                    booking.setRoomNumber(roomNumber);
+                            // Nạp layout booking_item.xml
+                            View bookingView = inflater.inflate(R.layout.item_booking, bookingContainer, false);
 
-                    if (!firstShown && ("Đã đặt".equals(booking.getStatus()) || "Đã ở".equals(booking.getStatus()))) {
-                        txtCustomerName.setText("Khách hàng: " + booking.getCustomer_name());
-                        txtCheckInDate.setText("Ngày nhận phòng: " + booking.getCheck_in());
-                        txtCheckOutDate.setText("Ngày trả phòng: " + booking.getCheck_out());
-                        txtGuests.setText("Số lượng khách: " + booking.getGuests());
-                        txtPayment.setText("Thanh toán: " + booking.getPayment());
-                        txtPhone.setText("SĐT: " + booking.getCustomer_phone());
-                        firstShown = true;
+                            ((TextView) bookingView.findViewById(R.id.txtCustomerName)).setText("Khách hàng: " + customerName);
+                            ((TextView) bookingView.findViewById(R.id.txtPhone)).setText("SĐT: " + phone);
+                            ((TextView) bookingView.findViewById(R.id.txtGuests)).setText("Khách: " + guests);
+                            ((TextView) bookingView.findViewById(R.id.txtPayment)).setText("Thanh toán: " + payment);
+                            ((TextView) bookingView.findViewById(R.id.txtCheckIn)).setText("Nhận phòng: " + checkIn);
+                            ((TextView) bookingView.findViewById(R.id.txtCheckOut)).setText("Trả phòng: " + checkOut);
+                            ((TextView) bookingView.findViewById(R.id.txtStatus)).setText("Tình trạng: " + status);
+
+                            bookingContainer.addView(bookingView);
+
+                            if (!foundFirstBooking) {
+                                txtCustomerName.setText("Khách hàng: " + customerName);
+                                txtCheckInDate.setText("Ngày nhận phòng: " + checkIn);
+                                txtCheckOutDate.setText("Ngày trả phòng: " + checkOut);
+                                txtGuests.setText("Số lượng khách: " + guests);
+                                txtPayment.setText("Thanh toán: " + payment);
+                                txtPhone.setText("SĐT: " + phone);
+                                foundFirstBooking = true;
+                            }
+                        }
                     }
 
-                    View item = LayoutInflater.from(RoomDetailActivity.this).inflate(R.layout.item_booking, bookingContainer, false);
-                    fillBookingView(item, booking);
-                    bookingContainer.addView(item);
+                    if (!foundFirstBooking) {
+                        txtCustomerName.setText("Chưa có thông tin đặt phòng.");
+                        txtCheckInDate.setText("");
+                        txtCheckOutDate.setText("");
+                        txtGuests.setText("");
+                        txtPayment.setText("");
+                        txtPhone.setText("");
+                    }
                 }
 
-                if (!firstShown) {
-                    txtCustomerName.setText("Chưa có thông tin đặt phòng.");
-                    txtCheckInDate.setText(""); txtCheckOutDate.setText("");
-                    txtGuests.setText(""); txtPayment.setText(""); txtPhone.setText("");
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.e("DEBUG", "Lỗi truy vấn Firebase: " + error.getMessage());
+                    Toast.makeText(RoomDetailActivity.this, "Lỗi kết nối dữ liệu", Toast.LENGTH_SHORT).show();
                 }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(RoomDetailActivity.this, "Lỗi tải dữ liệu!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void fillBookingView(View view, BookingModel booking) {
-        TextView txtCustomerName = view.findViewById(R.id.txtCustomerName);
-        TextView txtPhone = view.findViewById(R.id.txtPhone);
-        TextView txtGuests = view.findViewById(R.id.txtGuests);
-        TextView txtPayment = view.findViewById(R.id.txtPayment);
-        TextView txtCheckIn = view.findViewById(R.id.txtCheckIn);
-        TextView txtCheckOut = view.findViewById(R.id.txtCheckOut);
-        TextView txtStatus = view.findViewById(R.id.txtStatus);
-        LinearLayout layoutButtons = view.findViewById(R.id.layoutButtons);
-        Button btnCheckIn = view.findViewById(R.id.btnCheckIn);
-        Button btnCancel = view.findViewById(R.id.btnCancel);
-        Button btnCheckOut = view.findViewById(R.id.btnCheckOut);
-
-        txtCustomerName.setText("Khách hàng: " + booking.getCustomer_name());
-        txtPhone.setText("SĐT: " + booking.getCustomer_phone());
-        txtGuests.setText("Khách: " + booking.getGuests());
-        txtPayment.setText("Thanh toán: " + booking.getPayment());
-        txtCheckIn.setText("Nhận phòng: " + booking.getCheck_in());
-        txtCheckOut.setText("Trả phòng: " + booking.getCheck_out());
-        txtStatus.setText("Tình trạng: " + booking.getStatus());
-
-        layoutButtons.setVisibility(View.GONE);
-        if ("Đã đặt".equals(booking.getStatus())) {
-            layoutButtons.setVisibility(View.VISIBLE);
-            btnCheckIn.setVisibility(View.VISIBLE);
-            btnCancel.setVisibility(View.VISIBLE);
-            btnCheckOut.setVisibility(View.GONE);
-
-            btnCheckIn.setOnClickListener(v -> updateStatus(booking, "Đã ở"));
-            btnCancel.setOnClickListener(v -> updateStatus(booking, "Đã huỷ đặt"));
-        } else if ("Đã ở".equals(booking.getStatus())) {
-            layoutButtons.setVisibility(View.VISIBLE);
-            btnCheckIn.setVisibility(View.GONE);
-            btnCancel.setVisibility(View.GONE);
-            btnCheckOut.setVisibility(View.VISIBLE);
-
-            btnCheckOut.setOnClickListener(v -> updateStatus(booking, "Đã trả phòng"));
+            });
         }
     }
 
-    private void updateStatus(BookingModel booking, String newStatus) {
-        String bookingId = booking.getBookingId();
-        String roomKey = booking.getRoomNumber();
-        if (roomKey == null || bookingId == null) {
-            Toast.makeText(this, "Thiếu thông tin!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        FirebaseDatabase db = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/");
-        DatabaseReference bookingRef = db.getReference("bookings").child(roomKey).child(bookingId).child("status");
-        DatabaseReference roomRef = db.getReference("rooms").child(roomKey).child("status");
-
-        bookingRef.setValue(newStatus);
-        String roomStatus;
-        switch (newStatus) {
-            case "Đã ở":
-                roomStatus = "in-use";
-                break;
-            case "Đã huỷ đặt":
-            case "Đã trả phòng":
-                roomStatus = "available";
-                break;
-            default:
-                roomStatus = "booked";
-                break;
-        }
-
-
-        roomRef.setValue(roomStatus).addOnSuccessListener(unused -> {
-            Toast.makeText(this, "Đã cập nhật trạng thái", Toast.LENGTH_SHORT).show();
-            loadBookings(); // reload
-        });
-    }
-}

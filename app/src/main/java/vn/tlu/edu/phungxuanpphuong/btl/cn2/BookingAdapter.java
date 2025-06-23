@@ -51,73 +51,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
         holder.txtCheckOut.setText("Trả phòng: " + booking.getCheck_out());
         holder.txtStatus.setText("Tình trạng: " + booking.getStatus());
 
-        holder.layoutButtons.setVisibility(View.GONE);
-
-        if ("Đã đặt".equals(booking.getStatus())) {
-            holder.layoutButtons.setVisibility(View.VISIBLE);
-            holder.btnCheckIn.setVisibility(View.VISIBLE);
-            holder.btnCancel.setVisibility(View.VISIBLE);
-            holder.btnCheckOut.setVisibility(View.GONE);
-
-            holder.btnCheckIn.setOnClickListener(v -> updateStatus(booking, "Đã ở"));
-            holder.btnCancel.setOnClickListener(v -> updateStatus(booking, "Đã huỷ đặt"));
-
-        } else if ("Đã ở".equals(booking.getStatus())) {
-            holder.layoutButtons.setVisibility(View.VISIBLE);
-            holder.btnCheckIn.setVisibility(View.GONE);
-            holder.btnCancel.setVisibility(View.GONE);
-            holder.btnCheckOut.setVisibility(View.VISIBLE);
-
-            holder.btnCheckOut.setOnClickListener(v -> updateStatus(booking, "Đã trả phòng"));
-        }
-    }
-
-    private void updateStatus(BookingModel booking, String newStatus) {
-        String roomNumber = booking.getRoomNumber(); // KEY CHUẨN như "203"
-        String bookingId = booking.getBookingId();
-
-        if (roomNumber == null || bookingId == null) {
-            Toast.makeText(context, "Thiếu thông tin phòng hoặc mã đặt phòng!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        FirebaseDatabase db = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/");
-
-        // Cập nhật trạng thái booking
-        db.getReference("bookings")
-                .child(roomNumber)
-                .child(bookingId)
-                .child("status")
-                .setValue(newStatus)
-                .addOnSuccessListener(unused -> {
-                    Toast.makeText(context, "Đã cập nhật trạng thái!", Toast.LENGTH_SHORT).show();
-                    if (statusChangedListener != null) {
-                        statusChangedListener.onStatusChanged();
-                    }
-                })
-                .addOnFailureListener(e ->
-                        Toast.makeText(context, "Lỗi cập nhật: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-        // Trạng thái tương ứng của phòng
-        String newRoomStatus;
-        switch (newStatus) {
-            case "Đã ở":
-                newRoomStatus = "in-use";
-                break;
-            case "Đã trả phòng":
-            case "Đã huỷ đặt":
-                newRoomStatus = "available";
-                break;
-            default:
-                newRoomStatus = "booked";
-                break;
-        }
-
-        // Cập nhật trạng thái của phòng
-        db.getReference("rooms")
-                .child(roomNumber)
-                .child("status")
-                .setValue(newRoomStatus);
     }
 
     @Override
@@ -127,8 +60,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
 
     public static class BookingViewHolder extends RecyclerView.ViewHolder {
         TextView txtCustomerName, txtPhone, txtGuests, txtPayment, txtCheckIn, txtCheckOut, txtStatus;
-        LinearLayout layoutButtons;
-        Button btnCheckIn, btnCancel, btnCheckOut;
 
         public BookingViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,11 +70,6 @@ public class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingV
             txtCheckIn = itemView.findViewById(R.id.txtCheckIn);
             txtCheckOut = itemView.findViewById(R.id.txtCheckOut);
             txtStatus = itemView.findViewById(R.id.txtStatus);
-
-            layoutButtons = itemView.findViewById(R.id.layoutButtons);
-            btnCheckIn = itemView.findViewById(R.id.btnCheckIn);
-            btnCancel = itemView.findViewById(R.id.btnCancel);
-            btnCheckOut = itemView.findViewById(R.id.btnCheckOut);
         }
     }
 }

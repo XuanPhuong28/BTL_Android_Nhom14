@@ -51,17 +51,13 @@
             android:layout_weight="1"
             tools:ignore="TouchTargetSizeCheck" />
 
-        <TextView
-            android:id="@+id/txtDateFilter"
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Chọn ngày"
-            android:padding="12dp"
-            android:background="@android:drawable/editbox_background"
-            android:textColor="@android:color/black"
-            android:drawableEnd="@android:drawable/ic_menu_today"
-            android:gravity="center_vertical"
-            android:drawablePadding="8dp" />
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <Button
             android:id="@+id/btnApply"
