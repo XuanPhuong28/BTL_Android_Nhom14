@@ -10,14 +10,12 @@ public class RoomModel implements Serializable {
     private String status;
     private String description;
     private String imageUrl;
-    private int beds;
 
     public RoomModel() {
         // Required for Firebase
     }
 
-    public RoomModel(String roomId, String roomNumber, String type, int price, String status,
-                     String description, String imageUrl, int beds) {
+    public RoomModel(String roomId, String roomNumber, String type, int price, String status, String description, String imageUrl) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
         this.type = type;
@@ -25,7 +23,6 @@ public class RoomModel implements Serializable {
         this.status = status;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.beds = beds;
     }
 
     public String getRoomId() { return roomId; }
@@ -35,7 +32,6 @@ public class RoomModel implements Serializable {
     public String getStatus() { return status; }
     public String getDescription() { return description; }
     public String getImageUrl() { return imageUrl; }
-    public int getBeds() { return beds; }
 
     public void setRoomId(String roomId) { this.roomId = roomId; }
     public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
@@ -44,5 +40,4 @@ public class RoomModel implements Serializable {
     public void setStatus(String status) { this.status = status; }
     public void setDescription(String description) { this.description = description; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
-    public void setBeds(int beds) { this.beds = beds; }
 }

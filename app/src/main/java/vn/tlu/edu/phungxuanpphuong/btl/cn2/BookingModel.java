@@ -1,6 +1,7 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 public class BookingModel {
+    private String roomNumber;
     private String type;
     private int beds;
     private int price;
@@ -12,11 +13,15 @@ public class BookingModel {
     private String customer_name;
     private String customer_phone;
 
+    private String roomId;
+    private String bookingId;
     public BookingModel() {
         // Required for Firebase
     }
 
     // Getter & Setter đầy đủ
+    public String getRoomNumber() { return roomNumber; }
+
     public String getType() { return type; }
     public int getBeds() { return beds; }
     public int getPrice() { return price; }
@@ -27,7 +32,10 @@ public class BookingModel {
     public String getCheck_out() { return check_out; }
     public String getCustomer_name() { return customer_name; }
     public String getCustomer_phone() { return customer_phone; }
+    public String getRoomId() { return roomId; }
+    public String getBookingId() { return bookingId; }
 
+    public void setRoomNumber(String roomNumber) { this.roomNumber = roomNumber; }
     public void setType(String type) { this.type = type; }
     public void setBeds(int beds) { this.beds = beds; }
     public void setPrice(int price) { this.price = price; }
@@ -38,5 +46,7 @@ public class BookingModel {
     public void setCheck_out(String check_out) { this.check_out = check_out; }
     public void setCustomer_name(String customer_name) { this.customer_name = customer_name; }
     public void setCustomer_phone(String customer_phone) { this.customer_phone = customer_phone; }
+    public void setRoomId(String roomId) { this.roomId = roomId; }
+    public void setBookingId(String bookingId) { this.bookingId = bookingId; }
 }
 
