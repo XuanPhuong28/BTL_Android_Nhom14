@@ -15,7 +15,7 @@
         <activity android:name=".cn2.RoomListActivity"/>
         <activity android:name=".cn2.RoomDetailActivity"/>
 
-        <activity android:name=".AdminActivity"/>
+
         <activity android:name=".cn2.RoomManageActivity"/>
         <activity android:name=".cn2.AddRoomActivity"/>
         <activity

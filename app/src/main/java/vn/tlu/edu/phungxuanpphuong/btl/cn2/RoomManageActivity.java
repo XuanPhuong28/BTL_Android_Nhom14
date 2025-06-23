@@ -13,20 +13,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import vn.tlu.edu.phungxuanpphuong.btl.MainActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class RoomManageActivity extends AppCompatActivity {
+
     private RecyclerView recyclerView;
     private RoomBookingAdapter adapter;
     private List<RoomModel> roomList;
     private Spinner spinnerType, spinnerStatus;
-    private Button btnApply;
-    private Button buttonAddRoom;
+    private Button btnApply, buttonAddRoom;
 
     private List<RoomModel> originalRoomList = new ArrayList<>();
 
@@ -41,7 +43,7 @@ public class RoomManageActivity extends AppCompatActivity {
 
         roomList = new ArrayList<>();
         adapter = new RoomBookingAdapter(roomList, this, room -> {
-
+            // Xử lý sự kiện khi click vào item nếu cần
         });
         recyclerView.setAdapter(adapter);
 
@@ -74,8 +76,10 @@ public class RoomManageActivity extends AppCompatActivity {
             startActivity(new Intent(RoomManageActivity.this, AddRoomActivity.class));
         });
     }
+
     private void fetchRoomsFromFirebase() {
-        DatabaseReference ref = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        DatabaseReference ref = FirebaseDatabase
+                .getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")
                 .getReference("rooms");
 
         ref.addValueEventListener(new ValueEventListener() {
@@ -88,12 +92,27 @@ public class RoomManageActivity extends AppCompatActivity {
                         originalRoomList.add(room);
                     }
                 }
-                applyFilter();
+
+                // Sắp xếp theo số phòng (roomNumber) tăng dần
+                Collections.sort(originalRoomList, new Comparator<RoomModel>() {
+                    @Override
+                    public int compare(RoomModel o1, RoomModel o2) {
+                        try {
+                            int num1 = Integer.parseInt(o1.getRoomNumber());
+                            int num2 = Integer.parseInt(o2.getRoomNumber());
+                            return Integer.compare(num1, num2);
+                        } catch (NumberFormatException e) {
+                            return o1.getRoomNumber().compareTo(o2.getRoomNumber());
+                        }
+                    }
+                });
+
+                applyFilter(); // cập nhật giao diện
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("RoomListActivity", "Firebase error: " + error.getMessage());
+                Log.e("RoomManageActivity", "Firebase error: " + error.getMessage());
             }
         });
     }
