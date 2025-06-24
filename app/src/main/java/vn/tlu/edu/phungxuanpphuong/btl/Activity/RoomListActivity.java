@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import vn.tlu.edu.phungxuanpphuong.btl.Adapter.RoomBookingAdapter;
 import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
 import java.util.ArrayList;
@@ -74,6 +76,12 @@ public class RoomListActivity extends AppCompatActivity {
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
+        ImageView btnLogout = findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut(); // Nếu dùng Firebase Auth
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
     }
     private void fetchRoomsFromFirebase() {
         DatabaseReference ref = FirebaseDatabase.getInstance("https://btlon-941fd-default-rtdb.asia-southeast1.firebasedatabase.app/")

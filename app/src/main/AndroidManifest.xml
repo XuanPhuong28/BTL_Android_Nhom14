@@ -17,14 +17,14 @@
         <activity android:name=".Activity.BookingFormActivity"/>
         <activity android:name=".Activity.BookingSuccessActivity"/>
         <activity android:name=".Activity.GuestRoomDetailActivity"/>
-        <activity android:name=".Activity.LoginActivity"/>
+        <activity android:name=".Activity.AdminActivity"/>
         <activity android:name=".Activity.RoomManageActivity"/>
         <activity android:name=".Activity.RoomDetailActivity5"/>
         <activity android:name=".Activity.AddRoomActivity"/>
         <activity android:name=".Activity.GuestActivity"/>
 
         <activity
-            android:name=".Activity.AdminActivity"
+            android:name=".Activity.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
