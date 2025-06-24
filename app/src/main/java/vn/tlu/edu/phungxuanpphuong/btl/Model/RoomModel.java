@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Model;
 
 import java.io.Serializable;
 

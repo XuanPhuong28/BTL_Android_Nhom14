@@ -12,14 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Btl"
         tools:targetApi="31">
-        <activity android:name=".cn2.RoomListActivity"/>
-        <activity android:name=".cn2.RoomDetailActivity"/>
+        <activity android:name=".Activity.RoomListActivity"/>
+        <activity android:name=".Activity.RoomDetailActivity"/>
+        <activity android:name=".Activity.BookingFormActivity"/>
+        <activity android:name=".Activity.BookingSuccessActivity"/>
+        <activity android:name=".Activity.GuestRoomDetailActivity"/>
+        <activity android:name=".Activity.LoginActivity"/>
+        <activity android:name=".Activity.RoomManageActivity"/>
+        <activity android:name=".Activity.RoomDetailActivity5"/>
+        <activity android:name=".Activity.AddRoomActivity"/>
+        <activity android:name=".Activity.GuestActivity"/>
 
-
-        <activity android:name=".cn2.RoomManageActivity"/>
-        <activity android:name=".cn2.AddRoomActivity"/>
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.AdminActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

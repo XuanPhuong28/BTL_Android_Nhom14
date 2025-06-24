@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import vn.tlu.edu.phungxuanpphuong.btl.GuestActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class BookingSuccessActivity extends AppCompatActivity {

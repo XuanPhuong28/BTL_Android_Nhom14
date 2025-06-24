@@ -1,11 +1,8 @@
-package vn.tlu.edu.phungxuanpphuong.btl;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,9 +21,9 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
-import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomAdapter;
-import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
+import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.Adapter.RoomAdapter;
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 
 public class GuestActivity extends AppCompatActivity {
     private RecyclerView recyclerView;

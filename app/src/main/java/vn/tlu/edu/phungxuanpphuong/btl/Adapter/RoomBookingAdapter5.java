@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn5;
+package vn.tlu.edu.phungxuanpphuong.btl.Adapter;
 
 
 import android.content.Context;
@@ -16,19 +16,19 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
-import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 
-public class RoomBookingAdapter5 extends RecyclerView.Adapter<vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder> {
+public class RoomBookingAdapter5 extends RecyclerView.Adapter<RoomBookingAdapter5.RoomViewHolder> {
 
     private List<RoomModel> roomList;
     private Context context;
-    private vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.OnItemClickListener listener;
+    private RoomBookingAdapter5.OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(RoomModel room);
     }
 
-    public RoomBookingAdapter5(List<RoomModel> roomList, Context context, vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.OnItemClickListener listener) {
+    public RoomBookingAdapter5(List<RoomModel> roomList, Context context, RoomBookingAdapter5.OnItemClickListener listener) {
         this.roomList = roomList;
         this.context = context;
         this.listener = listener;
@@ -36,13 +36,13 @@ public class RoomBookingAdapter5 extends RecyclerView.Adapter<vn.tlu.edu.phungxu
 
     @NonNull
     @Override
-    public vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RoomBookingAdapter5.RoomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_room, parent, false);
-        return new vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder(view);
+        return new RoomBookingAdapter5.RoomViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomBookingAdapter5.RoomViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RoomBookingAdapter5.RoomViewHolder holder, int position) {
         RoomModel room = roomList.get(position);
         holder.txtRoomNumber.setText("Phòng " + room.getRoomNumber());
         holder.txtType.setText("Loại: " + room.getType());
@@ -85,4 +85,3 @@ public class RoomBookingAdapter5 extends RecyclerView.Adapter<vn.tlu.edu.phungxu
         notifyDataSetChanged();
     }
 }
-

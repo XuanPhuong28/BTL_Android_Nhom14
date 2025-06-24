@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
-import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.*;

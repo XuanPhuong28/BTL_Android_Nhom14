@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn1;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import vn.tlu.edu.phungxuanpphuong.btl.AdminActivity;
-import vn.tlu.edu.phungxuanpphuong.btl.GuestActivity;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
 
 public class LoginActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import vn.tlu.edu.phungxuanpphuong.btl.Adapter.RoomBookingAdapter5;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 
 import com.google.firebase.database.*;
 
@@ -25,7 +27,7 @@ import java.util.List;
 public class RoomManageActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
-    private RoomBookingAdapter adapter;
+    private RoomBookingAdapter5 adapter;
     private List<RoomModel> roomList;
     private Spinner spinnerType, spinnerStatus;
     private Button btnApply, buttonAddRoom;
@@ -42,8 +44,10 @@ public class RoomManageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         roomList = new ArrayList<>();
-        adapter = new RoomBookingAdapter(roomList, this, room -> {
-            // Xử lý sự kiện khi click vào item nếu cần
+        adapter = new RoomBookingAdapter5(roomList, this, room -> {
+            Intent intent = new Intent(RoomManageActivity.this, RoomDetailActivity5.class);
+            intent.putExtra("room", room); // room là đối tượng RoomModel
+            startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
 
@@ -123,8 +127,8 @@ public class RoomManageActivity extends AppCompatActivity {
 
         List<RoomModel> filtered = new ArrayList<>();
         for (RoomModel room : originalRoomList) {
-            boolean matchType = selectedType.equalsIgnoreCase("Tất cả") || room.getType().equalsIgnoreCase(selectedType);
-            boolean matchStatus = selectedStatus.equalsIgnoreCase("Tất cả") || room.getStatus().equalsIgnoreCase(selectedStatus);
+            boolean matchType = selectedType.equals("Loại phòng") || room.getType().equalsIgnoreCase(selectedType);
+            boolean matchStatus = selectedStatus.equals("Tình trạng") || room.getStatus().equalsIgnoreCase(selectedStatus);
             if (matchType && matchStatus) {
                 filtered.add(room);
             }

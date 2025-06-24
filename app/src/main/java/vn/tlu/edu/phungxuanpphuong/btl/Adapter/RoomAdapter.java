@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +17,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.List;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.Activity.GuestRoomDetailActivity;
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 
 public class RoomAdapter extends RecyclerView.Adapter<RoomAdapter.RoomViewHolder> {
     private final List<RoomModel> roomList;

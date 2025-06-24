@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,8 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
+import vn.tlu.edu.phungxuanpphuong.btl.Activity.AddRoomActivity;
 
 public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.RoomViewHolder> {
     private List<RoomModel> roomList;
@@ -53,7 +55,7 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
                 listener.onItemClick(room);
             } else {
                 // Nếu không dùng listener thì mở RoomEditActivity trực tiếp tại đây
-                Intent intent = new Intent(context, AddEditRoomActivity.class);
+                Intent intent = new Intent(context, AddRoomActivity.class);
                 intent.putExtra("room", room);
                 context.startActivity(intent);
             }

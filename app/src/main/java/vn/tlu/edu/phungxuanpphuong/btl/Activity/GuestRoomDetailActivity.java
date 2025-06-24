@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
+import vn.tlu.edu.phungxuanpphuong.btl.Model.RoomModel;
 import vn.tlu.edu.phungxuanpphuong.btl.R;
-import vn.tlu.edu.phungxuanpphuong.btl.cn1.LoginActivity;
 
 public class GuestRoomDetailActivity extends AppCompatActivity {
 
