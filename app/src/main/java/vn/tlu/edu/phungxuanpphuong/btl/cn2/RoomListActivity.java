@@ -102,8 +102,8 @@ public class RoomListActivity extends AppCompatActivity {
 
         List<RoomModel> filtered = new ArrayList<>();
         for (RoomModel room : originalRoomList) {
-            boolean matchType = selectedType.equals("Tất cả") || room.getType().equals(selectedType);
-            boolean matchStatus = selectedStatus.equals("Tất cả") || room.getStatus().equals(selectedStatus);
+            boolean matchType = selectedType.equals("Loại phòng") || room.getType().equalsIgnoreCase(selectedType);
+            boolean matchStatus = selectedStatus.equals("Tình trạng") || room.getStatus().equalsIgnoreCase(selectedStatus);
             if (matchType && matchStatus) {
                 filtered.add(room);
             }

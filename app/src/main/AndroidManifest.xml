@@ -18,6 +18,10 @@
         <activity android:name=".cn2.BookingFormActivity" />
         <activity android:name=".AdminActivity"/>
         <activity android:name=".GuestActivity"/>
+        <activity android:name=".cn2.RoomManageActivity"/>
+        <activity android:name=".cn2.AddEditRoomActivity"/>
+        <activity android:name=".cn2.RoomEditActivity" />
+<activity android:name=".cn2.BookingSuccessActivity"/>
         <activity
             android:name=".cn1.LoginActivity"
             android:exported="true">

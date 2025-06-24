@@ -2,13 +2,13 @@
 <resources>
     <string name="app_name">btl</string>
     <string-array name="room_types">
-        <item>Tất cả</item>
+        <item>Loại phòng</item>
         <item>Thường</item>
         <item>Luxury</item>
         <item>VIP</item>
     </string-array>
     <string-array name="room_statuses">
-        <item>Tất cả</item>
+        <item>Tình trạng</item>
         <item>available</item>
         <item>booked</item>
         <item>in-use</item>

@@ -1,6 +1,7 @@
 package vn.tlu.edu.phungxuanpphuong.btl.cn2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.*;
 import android.widget.*;
 import androidx.annotation.NonNull;
@@ -47,7 +48,16 @@ public class RoomBookingAdapter extends RecyclerView.Adapter<RoomBookingAdapter.
                 .placeholder(R.drawable.ic_launcher_background)
                 .into(holder.imgRoom);
 
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(room));
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(room);
+            } else {
+                // Nếu không dùng listener thì mở RoomEditActivity trực tiếp tại đây
+                Intent intent = new Intent(context, AddEditRoomActivity.class);
+                intent.putExtra("room", room);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
