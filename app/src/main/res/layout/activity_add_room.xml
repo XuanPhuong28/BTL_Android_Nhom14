@@ -44,14 +44,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mã phòng"
+            android:text="Số phòng"
             android:layout_marginTop="16dp" />
         <EditText
             android:id="@+id/edtRoomCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:hint="Nhập mã phòng"
+            android:hint="Nhập số phòng"
             android:minHeight="48dp" />
 
         <!-- Loại phòng -->

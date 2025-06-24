@@ -1,4 +1,4 @@
-package vn.tlu.edu.phungxuanpphuong.btl.cn2;
+package vn.tlu.edu.phungxuanpphuong.btl.cn5;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,15 +18,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import vn.tlu.edu.phungxuanpphuong.btl.R;
+import vn.tlu.edu.phungxuanpphuong.btl.cn2.RoomModel;
 
-public class RoomDetailActivity extends AppCompatActivity {
+public class RoomDetailActivity5 extends AppCompatActivity {
     private ImageView imgRoom;
     private TextView txtRoomNumber, txtType, txtPrice, txtStatus, txtDesc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_room_detail);
+        setContentView(R.layout.activity_room_detail_5);
 
         imgRoom = findViewById(R.id.imgRoom);
         txtRoomNumber = findViewById(R.id.txtRoomNumber);
@@ -60,7 +61,7 @@ public class RoomDetailActivity extends AppCompatActivity {
         }
 
         btnDelete.setOnClickListener(v -> {
-            new AlertDialog.Builder(RoomDetailActivity.this)
+            new AlertDialog.Builder(vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomDetailActivity5.this)
                     .setTitle("Xác nhận xóa")
                     .setMessage("Bạn có chắc muốn xóa phòng này?")
                     .setPositiveButton("Xóa", (dialog, which) -> {
@@ -73,10 +74,10 @@ public class RoomDetailActivity extends AppCompatActivity {
 
                         ref.child(roomId).removeValue().addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
-                                Toast.makeText(RoomDetailActivity.this, "Đã xóa phòng", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomDetailActivity5.this, "Đã xóa phòng", Toast.LENGTH_SHORT).show();
                                 finish(); // Quay lại màn trước
                             } else {
-                                Toast.makeText(RoomDetailActivity.this, "Lỗi khi xóa", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomDetailActivity5.this, "Lỗi khi xóa", Toast.LENGTH_SHORT).show();
                             }
                         });
                     })
@@ -84,10 +85,11 @@ public class RoomDetailActivity extends AppCompatActivity {
                     .show();
         });
         btnEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(RoomDetailActivity.this, AddRoomActivity.class);
+            Intent intent = new Intent(vn.tlu.edu.phungxuanpphuong.btl.cn5.RoomDetailActivity5.this, AddRoomActivity.class);
             intent.putExtra("roomModel", room); // Serializable
             intent.putExtra("isEditing", true);
             startActivity(intent);
         });
     }
 }
+

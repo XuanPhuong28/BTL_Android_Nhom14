@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="12dp"
+    android:layout_marginBottom="12dp"
     card_view:cardElevation="4dp"
-    android:layout_margin="12dp"
-    android:padding="8dp">
+    android:layout_margin="8dp">
 
-    <!-- Nội dung phòng -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:padding="12dp"
         android:gravity="center_vertical">
 
         <!-- Ảnh phòng -->

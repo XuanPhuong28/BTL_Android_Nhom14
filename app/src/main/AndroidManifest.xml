@@ -14,16 +14,12 @@
         tools:targetApi="31">
         <activity android:name=".cn2.RoomListActivity"/>
         <activity android:name=".cn2.RoomDetailActivity"/>
-        <activity android:name=".cn2.GuestRoomDetailActivity" />
-        <activity android:name=".cn2.BookingFormActivity" />
-        <activity android:name=".AdminActivity"/>
-        <activity android:name=".GuestActivity"/>
+
+
         <activity android:name=".cn2.RoomManageActivity"/>
-        <activity android:name=".cn2.AddEditRoomActivity"/>
-        <activity android:name=".cn2.RoomEditActivity" />
-<activity android:name=".cn2.BookingSuccessActivity"/>
+        <activity android:name=".cn2.AddRoomActivity"/>
         <activity
-            android:name=".cn1.LoginActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
