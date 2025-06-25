@@ -47,6 +47,7 @@ public class RoomManageActivity extends AppCompatActivity {
         adapter = new RoomBookingAdapter5(roomList, this, room -> {
             Intent intent = new Intent(RoomManageActivity.this, RoomDetailActivity5.class);
             intent.putExtra("room", room); // room là đối tượng RoomModel
+            intent.putExtra("fromManager", true);
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
